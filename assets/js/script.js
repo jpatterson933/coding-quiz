@@ -1,63 +1,53 @@
+//bt1 grabs button from html
 var bt1 = document.getElementById("startQuiz");
+//bt2 grabs buttom another button from html
 var bt2 = document.getElementById("nextQuestion");
+//this is where the time will be placed in the html grabbing the .time class
 var timeLe = document.querySelector(".time");
+//this is the amoutn of time on the clock
 var secLe = 60;
 
-//i want to display 1 question at a time from my html class .quest when i press next question button
+//variable pullQuestion pulls all divs with class quest and puts them into a node list
 var pullQuestion = document.querySelectorAll(".quest");
-// i need to change my node list to an array
+
+// variable question creates an array form the pull question
 var question = Array.from(pullQuestion)
-//i want to display one question from variable at a time from the test array breakdown further
 
-
+//this variable i chooses a random question form my question array
 var i = Math.floor(Math.random() * question.length);
-//add event listener to next random question
-//if you take prevent default off here, it will switch to start, and then press again and it will show another question
-bt2.onclick = function test(event) {
-    event.preventDefault();
 
-}
-
-bt1.onclick = function questionCycle(event) {
-    event.preventDefault();
-    question[i].style.display = "block";
-}
-
-
-//this is the next random question function and displays all questions on single page without cycling
-// bt2.addEventListener("click", function questionCycle(event){
-//     event.preventDefault();
-
-//     const random = Math.floor(Math.random() * question.length);
-//     console.log(random, question[random]);
-//     //var x makes questions appear in block format
-//     var x = question[random].style.display = "block";
-// })
-
-
-
-
+//this places bt1 into the body of the html script
 document.body.appendChild(bt1);
 
-bt1.addEventListener("click", function buttonSwitch(event) {
+//this is the start button to begin the quiz and it launches the first question
+bt1.onclick = function startQuiz(event) {
     event.preventDefault();
+
+    // removes bt1 from screen and shows the next button
     bt1.style.display = "none";
-    bt2.style.display = "flex";
+    bt2.style.display = "block";
+
+    //shows first question from question array
+    question[0].style.display = "block";
 
     //timer starts on click
     function setTime() {
         var timerInterval = setInterval(function() {
             secLe--;
-            timeLe.textContent = secLe + " left!";
-                if(secLe === 0) {
+            timeLe.textContent = secLe + " seconds left!";
+            if(secLe === 0) {
                     clearInterval(timerInterval);
                     sendMessage();
                 }
-        }, 1000);
-    }
-    setTime();
+            }, 1000);
+        }
+        setTime();
+}
 
-})
-
-;
+//will cycle through to next question BUT THATS IT
+bt2.onclick = function question2(event) {
+    event.preventDefault();
+    question[1].style.display = "block";
+    question[0].style.display = "none";
+}
 
