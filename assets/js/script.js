@@ -1,53 +1,114 @@
-//bt1 grabs button from html
-var bt1 = document.getElementById("startQuiz");
-//bt2 grabs buttom another button from html
-var bt2 = document.getElementById("nextQuestion");
-//this is where the time will be placed in the html grabbing the .time class
-var timeLe = document.querySelector(".time");
-//this is the amoutn of time on the clock
-var secLe = 60;
+const start = document.getElementById("start");
+const quiz = document.getElementById("quiz");
+const question= document.getElementById("question");
+const choiceA = document.getElementById("A");
+const choiceB = document.getElementById("B");
+const choiceC = document.getElementById("C");
+const counter = document.getElementById("counter");
+const scoreDiv = document.getElementById("score");
 
-//variable pullQuestion pulls all divs with class quest and puts them into a node list
-var pullQuestion = document.querySelectorAll(".quest");
+//this is the array we will use to input our questions for the test
+let questions = [
+    {
+        question: "?",
+        choiceA: "Correct",
+        choiceB: "W",
+        choiceC: "Wrong",
+        correct: "A"
+    },
+    {
+        question: "??",
+        choiceA: "Wrong",
+        choiceB: "Right",
+        choiceC: "Wrong",
+        correct: "B"
+    },
+    {
+        question: "???",
+        choiceA: "Wrong",
+        choiceB: "Wrong",
+        choiceC: "Right",
+        correct: "C"
+    }
+]
 
-// variable question creates an array form the pull question
-var question = Array.from(pullQuestion)
+const lasQuestion = questions.length - 1;
+let runningQuestion = 0;
+let count = 0;
+const questionTime = 10;
+const gaugeWidth = 150;
+const qaugeUnit = gaugeWidth / questionTime;
+let score = 0;
 
-//this variable i chooses a random question form my question array
-var i = Math.floor(Math.random() * question.length);
-
-//this places bt1 into the body of the html script
-document.body.appendChild(bt1);
-
-//this is the start button to begin the quiz and it launches the first question
-bt1.onclick = function startQuiz(event) {
-    event.preventDefault();
-
-    // removes bt1 from screen and shows the next button
-    bt1.style.display = "none";
-    bt2.style.display = "block";
-
-    //shows first question from question array
-    question[0].style.display = "block";
-
-    //timer starts on click
-    function setTime() {
-        var timerInterval = setInterval(function() {
-            secLe--;
-            timeLe.textContent = secLe + " seconds left!";
-            if(secLe === 0) {
-                    clearInterval(timerInterval);
-                    sendMessage();
-                }
-            }, 1000);
+function renderQuestion() {
+    let q = questions[runningQuestion];
+    
+    question.innerHTML = "<p>" + q.question +"</p>";
+    choiceA.innerHTML = q.choiceA;
+    choiceB.innerHTML = q.choiceB;
+    choiceC.innerHTML = q.choiceC;
+}
+//when you click on start the quiz begins
+start.addEventListener("click", function startQuiz() {
+    start.style.display = "none";
+    renderQuestion();
+    quiz.style.display = "block";
+    renderCounter();
+    TIMER = setInterval(renderCounter,1000);
+})
+//this function will render the counter and the final if statement will go to the next question if the counter hits the max
+//this is what we will use to control our time
+function renderCounter() {
+    if(count <= questionTime) {
+        counter.innerHTML = count;
+        count++
+    } else {
+        count = 0;
+        if(runningQuestion < lasQuestion){
+            runningQuestion++;
+            renderQuestion();
+    
+        } else{
+            //end of quiz
+            clearInterval(TIMER);
+            scoreRender();
         }
-        setTime();
+    }
+}
+//this function will check the answer and add to the score or decrease from the score
+//it will also reset the timer to 0 and cycle to the next question
+function checkAnswer(answer){
+    if(answer == questions[runningQuestion].correct) {
+        //answer is correct
+        score++;
+    } else {
+        //here is where we would subtract questions from the score -- if you put score-- it will show a negative percentage
+    }
+    count = 0;
+    if(runningQuestion < lasQuestion){
+        runningQuestion++;
+        renderQuestion();
+    } else{
+        //end of quiz
+        clearInterval(TIMER);
+        scoreRender();
+    }
 }
 
-//will cycle through to next question BUT THATS IT
-bt2.onclick = function question2(event) {
-    event.preventDefault();
-    question[1].style.display = "block";
-    question[0].style.display = "none";
+function answerIsCorrect() {
+    document.getElementById(runningQuestion).style.backgroundcolor = "green";
+}
+function answerIsWrong() {
+    document.getElementById(runningQuestion).style.backgroundcolor = "red";
 }
 
+//score render
+function scoreRender() {
+    scoreDiv.style.display = "block";
+
+    //calculate the score - amount of questions answered by the user
+    const scorePercent = Math.round(100 * score/questions.length);
+    
+    scoreDiv.innerHTML = "<p>" + scorePercent + "%" + "</p>";
+
+}
