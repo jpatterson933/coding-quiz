@@ -8,12 +8,21 @@ var question = document.querySelectorAll(".quest");
 // i need to change my node list to an array
 var test = Array.from(question)
 //i want to display one question from variable at a time from the test array breakdown further
-//i want to display one question from test array DONE
-test[2].style.display = "block";
-//
 
-console.log(test[2])
- 
+
+//add event listener to next random question
+
+
+bt2.addEventListener("click", function nextQuestion(event){
+    event.preventDefault();
+  
+    const random = Math.floor(Math.random() * test.length);
+    console.log(random, test[random]);
+    //now i want choices to not repeat
+    var x = test[random].style.display = "block";
+
+    
+})
 
 document.body.appendChild(bt1);
 
