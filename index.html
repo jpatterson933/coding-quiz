@@ -9,19 +9,26 @@
     <title>Quiz</title>
 </head>
 <body>
+    <!-- container for quiz -->
     <div id="container">
+        <!-- start button div -->
         <div id="start">Start Quiz</div>
         <div id="quiz" style="display: none">
+            <!-- div for questions to be pushed into from java -->
             <div id = "question"></div>
+            <!-- div for choices and div with class choice and id's to check answer in java array questions -->
             <div id="choices">
                 <div class="choice" id="A" onclick="checkAnswer('A')"></div>
                 <div class="choice" id="B" onclick="checkAnswer('B')"></div>
                 <div class="choice" id="C" onclick="checkAnswer('C')"></div>
             </div>
+            <!-- div for the timer for the quiz where it will be placed -->
             <div id="timer">
+                <!-- div for counter -->
                 <div id="counter"></div>
             </div>
         </div>
+        <!-- this is the div that will display the score at the end of the quiz -->
         <div id="score" style="display: none"></div>
     </div>
 

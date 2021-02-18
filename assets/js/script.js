@@ -1,48 +1,60 @@
+
+//start button for quiz
 const start = document.getElementById("start");
+//this represents the quiz div in html allowing us to place styles and stuff within
 const quiz = document.getElementById("quiz");
+//this is where the questions will get displayed
 const question= document.getElementById("question");
+//each of these choices will get displayed here
 const choiceA = document.getElementById("A");
 const choiceB = document.getElementById("B");
 const choiceC = document.getElementById("C");
+//this is our timer counter
 const counter = document.getElementById("counter");
+//this is where our score will get displayed
 const scoreDiv = document.getElementById("score");
 
 //this is the array we will use to input our questions for the test
 let questions = [
     {
-        question: "?",
-        choiceA: "Correct",
-        choiceB: "W",
-        choiceC: "Wrong",
+        question: "Will this test help you learn Javascript?",
+        choiceA: "Yes",
+        choiceB: "No",
+        choiceC: "Maybe",
         correct: "A"
     },
     {
-        question: "??",
-        choiceA: "Wrong",
-        choiceB: "Right",
-        choiceC: "Wrong",
+        question: "What does console.log() do?",
+        choiceA: "It tells us where to find buried treasure.",
+        choiceB: "It writes a message to log on the debugging console.",
+        choiceC: "It writes a message to our hero.",
         correct: "B"
     },
     {
-        question: "???",
-        choiceA: "Wrong",
-        choiceB: "Wrong",
-        choiceC: "Right",
+        question: "What is a function?",
+        choiceA: "A block of code that designs mini forest models.",
+        choiceB: "A block of cheese that you can eat.",
+        choiceC: "A block of code designed to perform a particular task.",
         correct: "C"
     }
 ]
 
+//this takes our question length and subtracts one to take on the variable of the LAST QUESTION 
 const lasQuestion = questions.length - 1;
+//current question on screen variable set at 0 so when it increments in the renderQuestion function
 let runningQuestion = 0;
+//this is our timer variable set to count which is set to 0 //will adjust to take on a total amoutn of time later
 let count = 0;
+//this variable sets questiontime to 10 seconds on each question
 const questionTime = 10;
-const gaugeWidth = 150;
-const qaugeUnit = gaugeWidth / questionTime;
+//this is our score variable
 let score = 0;
 
 function renderQuestion() {
+    //here we set the questions array to running question which is set at 0 above 
     let q = questions[runningQuestion];
     
+    // this displays our qeustions and choices on the screen
     question.innerHTML = "<p>" + q.question +"</p>";
     choiceA.innerHTML = q.choiceA;
     choiceB.innerHTML = q.choiceB;
@@ -83,6 +95,8 @@ function checkAnswer(answer){
         score++;
     } else {
         //here is where we would subtract questions from the score -- if you put score-- it will show a negative percentage
+        //subtract from score
+        score--;
     }
     count = 0;
     if(runningQuestion < lasQuestion){
