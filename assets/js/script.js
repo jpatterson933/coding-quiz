@@ -6,7 +6,7 @@ var timeEl = document.getElementById("quizTimer");
 //this represents the quiz div in html allowing us to place styles and stuff within
 const quiz = document.getElementById("quiz");
 //this is where the questions will get displayed
-const question= document.getElementById("question");
+const question = document.getElementById("question");
 //each of these choices will get displayed here
 const choiceA = document.getElementById("A");
 const choiceB = document.getElementById("B");
@@ -15,7 +15,7 @@ const choiceC = document.getElementById("C");
 const counter = document.getElementById("counter");
 //this is where our score will get displayed
 const scoreDiv = document.getElementById("score");
-
+const initials = document.getElementById("initials");
 const finish = document.getElementById("finish");
 
 //this is the array we will use to input our questions for the test
@@ -43,12 +43,11 @@ let questions = [
     }
 ]
 
+
 //this takes our question length and subtracts one to take on the variable of the LAST QUESTION 
 const lasQuestion = questions.length - 1;
 //current question on screen variable set at 0 so when it increments in the renderQuestion function
 let runningQuestion = 0;
-//this variable sets questiontime to 10 seconds on each question
-const questionTime = 10;
 //this is our score variable
 let score = 0;
 // time left variable
@@ -60,18 +59,13 @@ function setQuizTime() {
         secondsLeft--;
         timeEl.textContent = secondsLeft + " seconds left!";
         //this stops timer is seconds hits zero or the question is the last question
-        if(secondsLeft === 0 || runningQuestion == lasQuestion) {
+        if(secondsLeft === 0 ) {
             clearInterval(timerInterval);
-            sendMessage();
-            //this 
+            submitInitials();
         }
     }, 1000);
 }
 
-//function that sends message quiz over when the timer runs out
-function sendMessage() {
-    timeEl.textContent = "QUIZ OVER";
-}
 
 
 function renderQuestion() {
@@ -85,6 +79,7 @@ function renderQuestion() {
     choiceC.innerHTML = q.choiceC;
 }
 
+
 //when you click on start the quiz begins
 start.addEventListener("click", function startQuiz() {
     start.style.display = "none";
@@ -93,6 +88,7 @@ start.addEventListener("click", function startQuiz() {
     //runs my timer function
     setQuizTime();
 })
+
 
 
 //this function will check the answer and add to the score or decrease from the score
@@ -126,16 +122,70 @@ function checkAnswer(answer){
     } else{
         //end of quiz
         clearInterval(setQuizTime);
-        scoreRender();
+        submitInitials();
+        timeEl.textContent = "QUIZ OVER";
     }
 }
 
 
+//this function will display a click to see score option which I will then redirect the user to somewhere wwhere they can enter their initials
+//basically I should just add an input button and set the click to see your score as click to save your score
+function submitInitials() {
+    if(secondsLeft === 0 || runningQuestion == lasQuestion) {
+        finish.innerHTML = "Submit Score";
+        scoreRender();
+        timeEl.style.display = "none";
+    } 
+}
+
+
+
+finish.addEventListener("click", function saveScore(){
+    localStorage.setItem("highScore", JSON.stringify(score));
+    localStorage.setItem("initials", initials.value)
+
+    showHighScore();
+});
+
+
+//shows most recent saved highscore
+function showHighScore() {
+    //adds most recent last score and last name
+    var lastScore = JSON.parse(localStorage.getItem("highScore")) || [];
+    var lastName = localStorage.getItem("initials");
+
+    //puts each score into an object
+    const score = {
+        score: lastScore,
+        name: lastName,
+    };
+    //consol logs score
+    console.log(score)
+    document.getElementById("highscore").style.display = "block";
+    document.getElementById("showInitials").textContent = lastName;
+    document.getElementById("showHighScore").textContent = lastScore;
+}
+
 //score render
 function scoreRender() {
     scoreDiv.style.display = "block";
-
-    //calculate the score - amount of questions answered by the user
+    initials.style.display = "block";
     const scoreDisplay = score;
-    scoreDiv.innerHTML = "<p>" + scoreDisplay + "</p>";
+
+    question.style.display = "none";
+
+    choiceA.style.display = "none";
+    choiceB.style.display = "none";
+    choiceC.style.display = "none";
+
+    //displays score
+    scoreDiv.innerHTML = "<p>" + "Final Score: " + scoreDisplay + " shmeckles" + "</p>";
+    
 }
+
+// finish.
+// var bet = document.getElementById("initials").value;
+// localStorage.setItem("Initials", bet);
+
+// console.log(bet)
+
