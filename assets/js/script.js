@@ -1,4 +1,3 @@
-
 //start button for quiz
 const start = document.getElementById("start");
 //timer position in html
@@ -17,6 +16,7 @@ const counter = document.getElementById("counter");
 const scoreDiv = document.getElementById("score");
 const initials = document.getElementById("initials");
 const finish = document.getElementById("finish");
+const highScore = document.getElementById("highscore");
 
 //this is the array we will use to input our questions for the test
 let questions = [
@@ -51,7 +51,7 @@ let runningQuestion = 0;
 //this is our score variable
 let score = 0;
 // time left variable
-var secondsLeft = 8;
+var secondsLeft = 4;
 
 // quiz timer function
 function setQuizTime() {
@@ -71,7 +71,6 @@ function setQuizTime() {
 function renderQuestion() {
     //here we set the questions array to running question which is set at 0 above 
     let q = questions[runningQuestion];
-    
     // this displays our qeustions and choices on the screen
     question.innerHTML = "<p>" + q.question +"</p>";
     choiceA.innerHTML = q.choiceA;
@@ -91,36 +90,27 @@ start.addEventListener("click", function startQuiz() {
 
 
 
-//this function will check the answer and add to the score or decrease from the score
-//it will also reset the timer to 0 and cycle to the next question
+//this function will check answers as they cycle
 function checkAnswer(answer){
-    // says if the answer that was inputed is the same as the child .correct from parent questions(array of running questions) then it will 
-    //add 10 points to the score
+    //this checks child. correct to see if it matches the answer
     if(answer == questions[runningQuestion].correct) {
-        //answer is correct
-        //this adds 10 to the score total - adds 10 to the left element -- thats what += means
+        //adds to score
         score += 10;
-        //adds time when a question is right
+        //adds time
         secondsLeft = secondsLeft + 3;
-        //if the answer is not the same as in type or value to the child .correct of parent Questions[running questions ARRAY]
-        //then this will subtract from the score by 1
     } else {
-        //here is where we would subtract questions from the score -- if you put score-- it will show a negative percentage
-        //subtract from score
+        //subtracs from score
         score--;
-        //takes time away when a question is wrong
+        //subtracts time
         secondsLeft = secondsLeft - 1;
     }
-    //running questions is an array and if that array index number is less than the last question
-    //increase the running array by 1 (go to the next questions) and perform function RenderQuestion
+    //if the index position of runningQuestion is less than lasQuestion, then cycle to the next question
     if(runningQuestion < lasQuestion){
-        // increases runningQuestion array by 1
+        //cycles question
         runningQuestion++;
         renderQuestion();
-        //if the runningquestion array is not less than the last question then clear the timer
-        //and run the function scoreRender
+        //else if you are on last question, end quiz
     } else{
-        //end of quiz
         clearInterval(setQuizTime);
         submitInitials();
         timeEl.textContent = "QUIZ OVER";
@@ -128,59 +118,81 @@ function checkAnswer(answer){
 }
 
 
-//this function will display a click to see score option which I will then redirect the user to somewhere wwhere they can enter their initials
-//basically I should just add an input button and set the click to see your score as click to save your score
+//this funcition will change the text of finish to Submit Score and no longer display the time
 function submitInitials() {
-    if(secondsLeft === 0 || runningQuestion == lasQuestion) {
         finish.innerHTML = "Submit Score";
         scoreRender();
+        clearInterval(setQuizTime)
         timeEl.style.display = "none";
     } 
+
+    //displays score
+function scoreRender() {
+    //hides questions and answers
+    question.style.display = "none";
+    choiceA.style.display = "none";
+    choiceB.style.display = "none";
+    choiceC.style.display = "none";
+
+    //displays score and initial input
+    scoreDiv.style.display = "block";
+    initials.style.display = "block";
+
+    const scoreDisplay = score;
+
+
+    //displays score
+    scoreDiv.innerHTML = "<p>" + "Final Score: " + scoreDisplay + " shmeckles" + "</p>";
+    
 }
 
 
-
 finish.addEventListener("click", function saveScore(){
+    //stores MOST RECENT score and inital value on "submit score" --finish variable
     localStorage.setItem("highScore", JSON.stringify(score));
     localStorage.setItem("initials", initials.value)
 
     showHighScore();
+    clearInterval(setQuizTime);
+
+    //not running yet
+    // finalPageDisplay();
 });
 
 
 //shows most recent saved highscore
 function showHighScore() {
-    //adds most recent last score and last name
+
+    //stores MOST RECENT score and initials
     var lastScore = JSON.parse(localStorage.getItem("highScore")) || [];
     var lastName = localStorage.getItem("initials");
+
+    //displays High Score text
+    highScore.style.display = "block";
 
     //puts each score into an object
     const score = {
         score: lastScore,
         name: lastName,
     };
-    //consol logs score
+
     console.log(score)
-    document.getElementById("highscore").style.display = "block";
+    //pulls 
     document.getElementById("showInitials").textContent = lastName;
     document.getElementById("showHighScore").textContent = lastScore;
 }
 
-//score render
-function scoreRender() {
-    scoreDiv.style.display = "block";
-    initials.style.display = "block";
-    const scoreDisplay = score;
 
-    question.style.display = "none";
+//not running this yet
+// function finalPageDisplay () {
+//         //removes previous elements so only highscore displays
+//         initials.style.display = "none";
+//         scoreDiv.style.display = "none";
+//         finish.style.display = "none";
 
-    choiceA.style.display = "none";
-    choiceB.style.display = "none";
-    choiceC.style.display = "none";
+        
 
-    //displays score
-    scoreDiv.innerHTML = "<p>" + "Final Score: " + scoreDisplay + " shmeckles" + "</p>";
-    
+
 }
 
 // finish.
