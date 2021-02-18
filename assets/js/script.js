@@ -16,6 +16,8 @@ const counter = document.getElementById("counter");
 //this is where our score will get displayed
 const scoreDiv = document.getElementById("score");
 
+const finish = document.getElementById("finish");
+
 //this is the array we will use to input our questions for the test
 let questions = [
     {
@@ -72,9 +74,6 @@ function sendMessage() {
 }
 
 
-
-
-
 function renderQuestion() {
     //here we set the questions array to running question which is set at 0 above 
     let q = questions[runningQuestion];
@@ -85,6 +84,7 @@ function renderQuestion() {
     choiceB.innerHTML = q.choiceB;
     choiceC.innerHTML = q.choiceC;
 }
+
 //when you click on start the quiz begins
 start.addEventListener("click", function startQuiz() {
     start.style.display = "none";
@@ -104,12 +104,16 @@ function checkAnswer(answer){
         //answer is correct
         //this adds 10 to the score total - adds 10 to the left element -- thats what += means
         score += 10;
+        //adds time when a question is right
+        secondsLeft = secondsLeft + 3;
         //if the answer is not the same as in type or value to the child .correct of parent Questions[running questions ARRAY]
         //then this will subtract from the score by 1
     } else {
         //here is where we would subtract questions from the score -- if you put score-- it will show a negative percentage
         //subtract from score
         score--;
+        //takes time away when a question is wrong
+        secondsLeft = secondsLeft - 1;
     }
     //running questions is an array and if that array index number is less than the last question
     //increase the running array by 1 (go to the next questions) and perform function RenderQuestion
