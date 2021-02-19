@@ -1,0 +1,114 @@
+:root {
+    --buttonBackgroundColor: rgba(41, 169, 165, .2);
+    --buttonHoverColor: rgba(41, 169, 165, .7);
+}
+
+#container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#start {
+    display: flex;
+    justify-content: center;
+    font-size: 4em;
+    border: 1px solid black;
+    margin-top: 2em;
+    background-color: var(--buttonBackgroundColor);
+}
+
+#start:hover {
+    background-color: var(--buttonHoverColor);
+    cursor: grab;
+}
+
+#question {
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+    border: 1px solid black;
+}
+
+#A, #B, #C {
+    display: flex;
+    justify-content: center;
+    border: 1px black solid;
+    width: 30%;
+    padding: 1em;
+    margin: 15px auto;
+    background-color: var(--buttonBackgroundColor);
+}
+
+#A:hover, #B:hover, #C:hover {
+    background-color: var(--buttonHoverColor);
+    cursor: grab;
+}
+
+#score {
+    display: flex;
+    justify-content: center;
+    font-size: 3em;
+    border: 1px black solid;
+}
+
+#quizTimer {
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+}
+
+#initials {
+    display: flex;
+    justify-content: center;
+    margin: 1.5em auto;
+    padding: 1em;
+}
+
+#submitInitials {
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+    border: 1px black solid;
+    margin: 0 auto;
+    padding: .5em;
+    background-color: var(--buttonBackgroundColor);
+}
+
+#submitInitials:hover {
+    background-color: var(--buttonHoverColor);
+    cursor: grab;
+}
+
+#highscore {
+    display: flex;
+    justify-content: center;
+    font-size: 3em;
+}
+
+#showInitials {
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+}
+
+#showHighScore {
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+}
+
+#pageRefresh {
+    display: flex;
+    justify-content: center;
+    font-size: 2em;
+    border: 1px black solid;
+    margin: 0 auto;
+    padding: .5em;
+    background-color: var(--buttonBackgroundColor);
+}
+
+#pageRefresh:hover {
+    background: var(--buttonHoverColor);
+    cursor: grab;
+}

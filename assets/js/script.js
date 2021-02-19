@@ -1,3 +1,4 @@
+
 //start button for quiz
 const start = document.getElementById("start");
 //timer position in html
@@ -15,8 +16,10 @@ const counter = document.getElementById("counter");
 //this is where our score will get displayed
 const scoreDiv = document.getElementById("score");
 const initials = document.getElementById("initials");
+const submitInitials1 = document.getElementById("submitInitials");
 const finish = document.getElementById("finish");
 const highScore = document.getElementById("highscore");
+const pageRefresh = document.getElementById("pageRefresh");
 
 //this is the array we will use to input our questions for the test
 let questions = [
@@ -40,9 +43,15 @@ let questions = [
         choiceB: "A block of cheese that you can eat.",
         choiceC: "A block of code designed to perform a particular task.",
         correct: "C"
+    },
+    {
+        question: "Where should you link your javascript external file?",
+        choiceA: "In the CSS file.",
+        choiceB: "You don't link it.",
+        choiceC: "Link it at the bottom of the HTML file.",
+        correct: "C"
     }
 ]
-
 
 //this takes our question length and subtracts one to take on the variable of the LAST QUESTION 
 const lasQuestion = questions.length - 1;
@@ -51,14 +60,15 @@ let runningQuestion = 0;
 //this is our score variable
 let score = 0;
 // time left variable
-var secondsLeft = 4;
-
-// quiz timer function
+var secondsLeft = 180;
+//set timer interval to global so it can be called by other functions
+var timerInterval;
+// quiz timer
 function setQuizTime() {
-    var timerInterval = setInterval (function() {
+        timerInterval = setInterval (function() {
         secondsLeft--;
         timeEl.textContent = secondsLeft + " seconds left!";
-        //this stops timer is seconds hits zero or the question is the last question
+        //stops timer, runs clear interval function and submits initials
         if(secondsLeft === 0 ) {
             clearInterval(timerInterval);
             submitInitials();
@@ -67,7 +77,7 @@ function setQuizTime() {
 }
 
 
-
+//cycles through questions until last question
 function renderQuestion() {
     //here we set the questions array to running question which is set at 0 above 
     let q = questions[runningQuestion];
@@ -78,7 +88,6 @@ function renderQuestion() {
     choiceC.innerHTML = q.choiceC;
 }
 
-
 //when you click on start the quiz begins
 start.addEventListener("click", function startQuiz() {
     start.style.display = "none";
@@ -88,14 +97,12 @@ start.addEventListener("click", function startQuiz() {
     setQuizTime();
 })
 
-
-
-//this function will check answers as they cycle
+//checks answers as they cycle
 function checkAnswer(answer){
     //this checks child. correct to see if it matches the answer
     if(answer == questions[runningQuestion].correct) {
         //adds to score
-        score += 10;
+        score += 20;
         //adds time
         secondsLeft = secondsLeft + 3;
     } else {
@@ -111,22 +118,22 @@ function checkAnswer(answer){
         renderQuestion();
         //else if you are on last question, end quiz
     } else{
-        clearInterval(setQuizTime);
+        clearInterval(timerInterval);
         submitInitials();
         timeEl.textContent = "QUIZ OVER";
     }
 }
 
-
 //this funcition will change the text of finish to Submit Score and no longer display the time
 function submitInitials() {
-        finish.innerHTML = "Submit Score";
+        submitInitials1.style.display = "flex";
+        submitInitials1.innerHTML = "Submit Initials";
         scoreRender();
-        clearInterval(setQuizTime)
+        clearInterval(timerInterval)
         timeEl.style.display = "none";
     } 
 
-    //displays score
+//displays score
 function scoreRender() {
     //hides questions and answers
     question.style.display = "none";
@@ -137,63 +144,74 @@ function scoreRender() {
     //displays score and initial input
     scoreDiv.style.display = "block";
     initials.style.display = "block";
-
     const scoreDisplay = score;
 
 
     //displays score
     scoreDiv.innerHTML = "<p>" + "Final Score: " + scoreDisplay + " shmeckles" + "</p>";
+    scoreDiv.style.display = "flex"
+    scoreDiv.style.justifyContent = "center";
     
 }
 
 
-finish.addEventListener("click", function saveScore(){
-    //stores MOST RECENT score and inital value on "submit score" --finish variable
+
+
+//saves MOST RECENT highscore
+submitInitials1.addEventListener("click", function saveScore(){
     localStorage.setItem("highScore", JSON.stringify(score));
     localStorage.setItem("initials", initials.value)
 
-    showHighScore();
-    clearInterval(setQuizTime);
+    submitInitials1.style.display = "none";
+    
 
-    //not running yet
-    // finalPageDisplay();
+    showHighScore();
+    finalPageDisplay();
+    clearInterval(timerInterval);
 });
 
-
-//shows most recent saved highscore
+//displays MOST RECENT high score 
 function showHighScore() {
+    //adds most recent last score and last name
+    storeHighScore();
+    
+    highScore.style.display = "flex";
 
-    //stores MOST RECENT score and initials
+}
+
+function storeHighScore() {
     var lastScore = JSON.parse(localStorage.getItem("highScore")) || [];
     var lastName = localStorage.getItem("initials");
-
-    //displays High Score text
-    highScore.style.display = "block";
-
+    
     //puts each score into an object
     const score = {
         score: lastScore,
         name: lastName,
     };
 
-    console.log(score)
-    //pulls 
     document.getElementById("showInitials").textContent = lastName;
-    document.getElementById("showHighScore").textContent = lastScore;
+    document.getElementById("showHighScore").textContent = lastScore + " shmeckles";
+    
+
+
+    console.log(score)
 }
 
 
 //not running this yet
-// function finalPageDisplay () {
-//         //removes previous elements so only highscore displays
-//         initials.style.display = "none";
-//         scoreDiv.style.display = "none";
-//         finish.style.display = "none";
-
-        
-
+function finalPageDisplay () {
+        //removes previous elements so only highscore displays
+        initials.style.display = "none";
+        scoreDiv.style.display = "none";
+        finish.style.display = "none";
+        pageRefresh.style.display = "flex";
 
 }
+
+//restarts quiz
+pageRefresh.addEventListener ("click", function refreshPage(){
+    window.location.reload();
+});
 
 // finish.
 // var bet = document.getElementById("initials").value;
