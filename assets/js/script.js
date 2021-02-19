@@ -50,6 +50,48 @@ let questions = [
         choiceB: "You don't link it.",
         choiceC: "Link it at the bottom of the HTML file.",
         correct: "C"
+    },
+    {
+        question: "What is a string?",
+        choiceA: "A series of characters and is surrounded by quotes.",
+        choiceB: "It is what you use to Yo Yo.",
+        choiceB: "The thread on the end of my shirt.",
+        correct: "A"
+    },
+    {
+        question: "Where is a variable declared to be considered global in Javascript?",
+        choiceA: "It is declared all across the world.",
+        choiceB: "It is declared inside of a function.",
+        choiceC: "It is declared on its own outside of all functions.",
+        correct: "C"
+    },
+    {
+        question: "If something returns a True or False, what is it called?",
+        choiceA: "Boogie",
+        choiceB: "Boolean",
+        choiceC: "Croolean",
+        correct: "B"
+    },
+    {
+        question: "What is an object?",
+        choiceA: "A collection of properties",
+        choiceB: "A collection of strings",
+        choiceC: "A collection of functions",
+        correct: "A"
+    },
+    {
+        questions: "What will console.log('cheif') say in the console?",
+        choiceA: "chief",
+        choiceB: "Cheef",
+        choiceC: "cheif",
+        correct: "C"
+    },
+    {
+        question: "What is null?",
+        choiceA: "Nothing",
+        choiceB: "An error",
+        choiceC: "An Object",
+        correct: "C"
     }
 ]
 
