@@ -1,4 +1,3 @@
-
 //start button for quiz
 const start = document.getElementById("start");
 //timer position in html
@@ -80,7 +79,7 @@ let questions = [
         correct: "A"
     },
     {
-        questions: "What will console.log('cheif') say in the console?",
+        question: "What will console.log('cheif') say in the console?",
         choiceA: "chief",
         choiceB: "Cheef",
         choiceC: "cheif",
@@ -105,13 +104,14 @@ let score = 0;
 var secondsLeft = 180;
 //set timer interval to global so it can be called by other functions
 var timerInterval;
+
 // quiz timer
 function setQuizTime() {
-        timerInterval = setInterval (function() {
+    timerInterval = setInterval(function () {
         secondsLeft--;
         timeEl.textContent = secondsLeft + " seconds left!";
         //stops timer, runs clear interval function and submits initials
-        if(secondsLeft === 0 ) {
+        if (secondsLeft === 0 || secondsLeft < 0) {
             clearInterval(timerInterval);
             submitInitials();
         }
@@ -124,7 +124,7 @@ function renderQuestion() {
     //here we set the questions array to running question which is set at 0 above 
     let q = questions[runningQuestion];
     // this displays our qeustions and choices on the screen
-    question.innerHTML = "<p>" + q.question +"</p>";
+    question.innerHTML = "<p>" + q.question + "</p>";
     choiceA.innerHTML = q.choiceA;
     choiceB.innerHTML = q.choiceB;
     choiceC.innerHTML = q.choiceC;
@@ -140,26 +140,26 @@ start.addEventListener("click", function startQuiz() {
 })
 
 //checks answers as they cycle
-function checkAnswer(answer){
+function checkAnswer(answer) {
     //this checks child. correct to see if it matches the answer
-    if(answer == questions[runningQuestion].correct) {
+    if (answer == questions[runningQuestion].correct) {
         //adds to score
-        score += 20;
+        score += 25;
         //adds time
-        secondsLeft = secondsLeft + 3;
+        secondsLeft = secondsLeft + 5;
     } else {
-        //subtracs from score
+        //subtracts from score
         score--;
         //subtracts time
-        secondsLeft = secondsLeft - 1;
+        secondsLeft = secondsLeft - 10;
     }
-    //if the index position of runningQuestion is less than lasQuestion, then cycle to the next question
-    if(runningQuestion < lasQuestion){
+    //if the index position of runningQuestion is less than lastQuestion, then cycle to the next question
+    if (runningQuestion < lasQuestion) {
         //cycles question
         runningQuestion++;
         renderQuestion();
         //else if you are on last question, end quiz
-    } else{
+    } else {
         clearInterval(timerInterval);
         submitInitials();
         timeEl.textContent = "QUIZ OVER";
@@ -168,12 +168,12 @@ function checkAnswer(answer){
 
 //this funcition will change the text of finish to Submit Score and no longer display the time
 function submitInitials() {
-        submitInitials1.style.display = "flex";
-        submitInitials1.innerHTML = "Submit Initials";
-        scoreRender();
-        clearInterval(timerInterval)
-        timeEl.style.display = "none";
-    } 
+    submitInitials1.style.display = "flex";
+    submitInitials1.innerHTML = "Submit Initials";
+    scoreRender();
+    clearInterval(timerInterval)
+    timeEl.style.display = "none";
+}
 
 //displays score
 function scoreRender() {
@@ -182,31 +182,22 @@ function scoreRender() {
     choiceA.style.display = "none";
     choiceB.style.display = "none";
     choiceC.style.display = "none";
-
     //displays score and initial input
     scoreDiv.style.display = "block";
     initials.style.display = "block";
     const scoreDisplay = score;
-
-
     //displays score
-    scoreDiv.innerHTML = "<p>" + "Final Score: " + scoreDisplay + " shmeckles" + "</p>";
+    scoreDiv.innerHTML = "<p>" + "Final Score: " + scoreDisplay + " useless points" + "</p>";
     scoreDiv.style.display = "flex"
     scoreDiv.style.justifyContent = "center";
-    
+
 }
 
-
-
-
-//saves MOST RECENT highscore
-submitInitials1.addEventListener("click", function saveScore(){
+//saves MOST RECENT highscore (couldnt figure out how to store multiple logs with input)
+submitInitials1.addEventListener("click", function saveScore() {
     localStorage.setItem("highScore", JSON.stringify(score));
     localStorage.setItem("initials", initials.value)
-
     submitInitials1.style.display = "none";
-    
-
     showHighScore();
     finalPageDisplay();
     clearInterval(timerInterval);
@@ -216,48 +207,34 @@ submitInitials1.addEventListener("click", function saveScore(){
 function showHighScore() {
     //adds most recent last score and last name
     storeHighScore();
-    
     highScore.style.display = "flex";
 
 }
 
+//stores score into local storage to be pulled once initals are entered
 function storeHighScore() {
     var lastScore = JSON.parse(localStorage.getItem("highScore")) || [];
     var lastName = localStorage.getItem("initials");
-    
     //puts each score into an object
     const score = {
         score: lastScore,
         name: lastName,
     };
-
     document.getElementById("showInitials").textContent = lastName;
-    document.getElementById("showHighScore").textContent = lastScore + " shmeckles";
-    
-
-
-    console.log(score)
+    document.getElementById("showHighScore").textContent = lastScore + " useless points";
 }
 
-
-//not running this yet
-function finalPageDisplay () {
-        //removes previous elements so only highscore displays
-        initials.style.display = "none";
-        scoreDiv.style.display = "none";
-        finish.style.display = "none";
-        pageRefresh.style.display = "flex";
+//function to display final
+function finalPageDisplay() {
+    //removes previous elements so only highscore displays
+    initials.style.display = "none";
+    scoreDiv.style.display = "none";
+    finish.style.display = "none";
+    pageRefresh.style.display = "flex";
 
 }
 
 //restarts quiz
-pageRefresh.addEventListener ("click", function refreshPage(){
+pageRefresh.addEventListener("click", function refreshPage() {
     window.location.reload();
 });
-
-// finish.
-// var bet = document.getElementById("initials").value;
-// localStorage.setItem("Initials", bet);
-
-// console.log(bet)
-

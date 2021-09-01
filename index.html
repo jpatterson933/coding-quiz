@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,14 +9,16 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Quiz</title>
 </head>
+
 <body>
     <!-- container for quiz -->
+    <div id="visible-score"></div>
     <div id="container">
         <!-- start button div -->
         <div id="start">Start Quiz</div>
         <div id="quiz" style="display: none">
             <!-- div for questions to be pushed into from java -->
-            <div id = "question"></div>
+            <div id="question"></div>
             <!-- div for choices and div with class choice and id's to check answer in java array questions -->
             <div id="choices">
                 <div class="choice" id="A" onclick="checkAnswer('A')"></div>
@@ -44,6 +47,7 @@
     </div>
 
     <script src="assets/js/script.js"></script>
-        
-    </body>
-    </html>
+
+</body>
+
+</html>
